@@ -53,6 +53,7 @@ BWAPI::TilePosition getChokepoint(TilePosition currentChoke)
 	{
 
 	}
+	return TilePosition(0, 0);
 }
 
 BWAPI::Unit getAvailableWorker()

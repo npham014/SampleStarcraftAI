@@ -10,7 +10,7 @@ void ExampleAIModule::onStart()
 {
 	initBases();
 	m_workersMiningGas = 0;
-	Broodwar->sendText("This is BenBot");
+	Broodwar->sendText("This is not BenBot");
 
 	TilePosition newExpo = getNextExpansionLocation(Broodwar->self()->getStartLocation());
 	m_buildingManager.setNextExpansionLocation(newExpo);
@@ -175,20 +175,26 @@ void ExampleAIModule::onFrame()
 			} // closure: if idle
 
 		}
-		else if (u->getType() == UnitTypes::Terran_Barracks && !u->isTraining())
+
+		 else if (u->getType() == UnitTypes::Protoss_Gateway && !u->isTraining()) //N - Constantly Streams Zealots
 		{
-			if (availMinerals >= UnitTypes::Terran_Marine.mineralPrice())
+			TilePosition newExpo = m_scoutingManager.getNextExpansionLocation(Broodwar->self()->getStartLocation());
+			u->setRallyPoint(Position(newExpo));
+
+			if (availMinerals >= UnitTypes::Protoss_Zealot.mineralPrice())
 			{
 
-				u->build(UnitTypes::Terran_Marine);
+				u->build(UnitTypes::Protoss_Zealot);
 				
 			}
 		}
-		else if (u->getType() == UnitTypes::Terran_Factory && u->isCompleted())
+		/*else if (u->getType() == UnitTypes::Terran_Factory && u->isCompleted())
 		{
-
+			
+			// Rallies Siege Tanks straight to the newest base
 			TilePosition newExpo = m_scoutingManager.getNextExpansionLocation(Broodwar->self()->getStartLocation());
 			u->setRallyPoint(Position(newExpo));
+
 			if (u->getAddon() == 0)
 			{
 				//build an addon if there is none
@@ -205,21 +211,21 @@ void ExampleAIModule::onFrame()
 					
 				}
 			}
-		}
+		} 
 		else if (u->getType() == UnitTypes::Terran_Machine_Shop && u->isCompleted())
 		{
 			if (availMinerals >= TechTypes::Tank_Siege_Mode.mineralPrice() && availGas >= TechTypes::Tank_Siege_Mode.gasPrice())
 				u->research(TechTypes::Tank_Siege_Mode);
-		}
+		} */
 		else if (u->getType().isResourceDepot()) // A resource depot is a Command Center, Nexus, or Hatchery
 		{
-			if (!m_scoutingManager.hasScout() && !m_scoutingManager.foundEnemyMain())
+			if (!m_scoutingManager.hasScout() && !m_scoutingManager.foundEnemyMain()) // declare and send off scout
 			{
-				Unit scout = u->getClosestUnit(GetType == UnitTypes::Terran_SCV && (IsIdle || IsGatheringMinerals));
+				Unit scout = u->getClosestUnit(GetType == UnitTypes::Protoss_Probe && (IsIdle || IsGatheringMinerals));
 				m_scoutingManager.setScout(scout);
 			}
 
-
+			
 
 			// Order the depot to construct more workers! But only when it is idle.
 			if (u->isIdle() && availMinerals > 50 && !u->train(u->getType().getRace().getWorker()))
@@ -280,8 +286,10 @@ void ExampleAIModule::onFrame()
 			} // closure: failed to train idle unit
 
 		}
+		
 
 	} // closure: unit iterator
+	
 }
 
 void ExampleAIModule::onSendText(std::string text)
@@ -350,6 +358,7 @@ void ExampleAIModule::onUnitShow(BWAPI::Unit unit)
 			{
 				m_scoutingManager.setEnemyMain(BWTA::getRegion(unit->getPosition()));
 				m_enemyLocation = unit->getPosition();
+				
 			}
 		}
 	}

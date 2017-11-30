@@ -32,6 +32,7 @@ void ArmyManager::update(BWAPI::Position enemyLocation)
 
 				if (enemy)
 				{
+					/*
 					if (u->getType() == Terran_Siege_Tank_Tank_Mode)
 					{
 						//siege up first if we are a siege tank
@@ -64,8 +65,8 @@ void ArmyManager::update(BWAPI::Position enemyLocation)
 							//go into bunker
 							u->load(bunker);
 						}
-					}
-				}
+					}*/
+				} 
 			}
 
 			else
@@ -76,7 +77,7 @@ void ArmyManager::update(BWAPI::Position enemyLocation)
 				Unit enemy = u->getClosestUnit(IsEnemy);
 				if (enemy)
 				{
-					if (u->getType() == Terran_Siege_Tank_Tank_Mode)
+					/*if (u->getType() == Terran_Siege_Tank_Tank_Mode)
 					{
 						//siege up first if we are a siege tank
 						if (enemy->getPosition().getApproxDistance(u->getPosition()) < 400)
@@ -87,13 +88,13 @@ void ArmyManager::update(BWAPI::Position enemyLocation)
 						{
 							u->unsiege();
 						}
-					}
-				}
+					}*/
+				} 
 
-				if (u->isAttacking() && u->getType() == Terran_Siege_Tank_Tank_Mode)
+				/*if (u->isAttacking() && u->getType() == Terran_Siege_Tank_Tank_Mode)
 				{
 					u->siege();
-				}
+				}*/
 				
 			}
 
